@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>服务条款 - PortAI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2ADB5C',
+                        secondary: '#64DF79',
+                        background: '#131312',
+                        surface: '#20201F',
+                        'surface-variant': '#353533',
+                        'on-background': '#E5E2E0',
+                        'on-surface': '#BBCBB7',
+                        'on-primary': '#003910',
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Noto Sans SC', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Plus Jakarta Sans', 'Noto Sans SC', sans-serif;
+            background: #131312;
+            color: #E5E2E0;
+            overflow-x: hidden;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #131312; }
+        ::-webkit-scrollbar-thumb { background: #353533; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #2ADB5C; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-sans">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-[#131312]/80 backdrop-blur-xl border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-8 h-20 flex items-center justify-between">
+            <a href="index.html" class="text-2xl font-bold tracking-tight">
+                <span class="text-primary">Port</span><span class="text-on-background">AI</span>
+            </a>
+            <a href="index.html" class="inline-flex items-center gap-1 text-white/70 hover:text-white transition-colors duration-200 text-sm font-medium">
+                <span class="material-symbols-outlined text-lg">arrow_back</span>
+                <span data-i18n="backHome">返回首页</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Content -->
+    <main class="max-w-4xl mx-auto px-8 pt-32 pb-20">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4" data-i18n="pageTitle">服务条款</h1>
+        <p class="text-on-surface/60 text-sm mb-12" data-i18n="lastUpdated">最后更新日期：2026年6月</p>
+
+        <div class="space-y-10 text-on-surface leading-relaxed">
+            <section>
+                <h2 class="text-xl font-semibold text-on-background mb-3" data-i18n="s1Title">服务描述</h2>
+                <p data-i18n="s1Content">PortAI 提供本地化的 AI API 接口调用工具，帮助用户更便捷地与兼容 OpenAI 的 API 服务进行交互。PortAI 作为一款桌面客户端，为您提供高效、直接的模型访问体验。</p>
+            </section>
+
+            <section>
+                <h2 class="text-xl font-semibold text-on-background mb-3" data-i18n="s2Title">使用条款</h2>
+                <ul class="list-disc list-inside space-y-2">
+                    <li data-i18n="s2Item1">用户需自行提供有效的 API Key 以使用相关服务。</li>
+                    <li data-i18n="s2Item2">用户需遵守所接入 API 服务提供商的使用条款及相关法律法规。</li>
+                    <li data-i18n="s2Item3">用户对其使用 PortAI 产生的所有 API 调用费用承担全部责任。</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2 class="text-xl font-semibold text-on-background mb-3" data-i18n="s3Title">免责声明</h2>
+                <ul class="list-disc list-inside space-y-2">
+                    <li data-i18n="s3Item1">PortAI 按"现状"提供，不提供任何明示或暗示的保证，包括但不限于适销性和特定用途适用性的保证。</li>
+                    <li data-i18n="s3Item2">PortAI 不对第三方 API 服务的可用性、准确性或安全性负责。</li>
+                    <li data-i18n="s3Item3">在适用法律允许的最大范围内，PortAI 不对因使用本软件导致的任何直接或间接损失承担责任。</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2 class="text-xl font-semibold text-on-background mb-3" data-i18n="s4Title">知识产权</h2>
+                <p data-i18n="s4Content">PortAI 采用开源许可协议发布，具体许可条款请参见项目 GitHub 仓库中的许可文件。</p>
+            </section>
+
+            <section>
+                <h2 class="text-xl font-semibold text-on-background mb-3" data-i18n="s5Title">条款更新</h2>
+                <p data-i18n="s5Content">我们保留随时修改这些条款的权利。条款变更后继续使用 PortAI 即表示您接受修改后的条款。</p>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-8 py-12">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <a href="index.html" class="text-xl font-bold tracking-tight">
+                    <span class="text-primary">Port</span><span class="text-on-background">AI</span>
+                </a>
+                <div class="flex items-center gap-6 text-sm text-on-surface/60">
+                    <a href="privacy.html" class="hover:text-primary transition-colors" data-i18n="footerPrivacy">隐私政策</a>
+                    <a href="terms.html" class="hover:text-primary transition-colors" data-i18n="footerTerms">服务条款</a>
+                    <a href="https://github.com/billye220670/AIShop" target="_blank" class="hover:text-primary transition-colors">GitHub</a>
+                </div>
+            </div>
+            <div class="mt-8 text-center text-sm text-on-surface/40" data-i18n="footerCopyright">
+                © 2026 PortAI.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const translations = {
+            zh: {
+                backHome: '返回首页',
+                pageTitle: '服务条款',
+                lastUpdated: '最后更新日期：2026年6月',
+                s1Title: '服务描述',
+                s1Content: 'PortAI 提供本地化的 AI API 接口调用工具，帮助用户更便捷地与兼容 OpenAI 的 API 服务进行交互。PortAI 作为一款桌面客户端，为您提供高效、直接的模型访问体验。',
+                s2Title: '使用条款',
+                s2Item1: '用户需自行提供有效的 API Key 以使用相关服务。',
+                s2Item2: '用户需遵守所接入 API 服务提供商的使用条款及相关法律法规。',
+                s2Item3: '用户对其使用 PortAI 产生的所有 API 调用费用承担全部责任。',
+                s3Title: '免责声明',
+                s3Item1: 'PortAI 按"现状"提供，不提供任何明示或暗示的保证，包括但不限于适销性和特定用途适用性的保证。',
+                s3Item2: 'PortAI 不对第三方 API 服务的可用性、准确性或安全性负责。',
+                s3Item3: '在适用法律允许的最大范围内，PortAI 不对因使用本软件导致的任何直接或间接损失承担责任。',
+                s4Title: '知识产权',
+                s4Content: 'PortAI 采用开源许可协议发布，具体许可条款请参见项目 GitHub 仓库中的许可文件。',
+                s5Title: '条款更新',
+                s5Content: '我们保留随时修改这些条款的权利。条款变更后继续使用 PortAI 即表示您接受修改后的条款。',
+                footerPrivacy: '隐私政策',
+                footerTerms: '服务条款',
+                footerCopyright: '© 2026 PortAI.'
+            },
+            en: {
+                backHome: 'Back to Home',
+                pageTitle: 'Terms of Service',
+                lastUpdated: 'Last Updated: June 2026',
+                s1Title: 'Service Description',
+                s1Content: 'PortAI provides a local AI API interface tool that enables users to interact more conveniently with OpenAI-compatible API services. As a desktop client, PortAI delivers an efficient, direct model access experience.',
+                s2Title: 'Terms of Use',
+                s2Item1: 'Users must provide their own valid API key to access the relevant services.',
+                s2Item2: 'Users must comply with the terms of use and applicable laws governing the API providers they connect to.',
+                s2Item3: 'Users are solely responsible for all API usage charges incurred through their use of PortAI.',
+                s3Title: 'Disclaimer',
+                s3Item1: 'PortAI is provided "as is" without warranties of any kind, either express or implied, including but not limited to warranties of merchantability and fitness for a particular purpose.',
+                s3Item2: 'PortAI assumes no responsibility for the availability, accuracy, or security of any third-party API services.',
+                s3Item3: 'To the maximum extent permitted by applicable law, PortAI shall not be liable for any direct or indirect damages arising from the use of this software.',
+                s4Title: 'Intellectual Property',
+                s4Content: 'PortAI is released under an open source license. Please refer to the license file in the project\'s GitHub repository for specific licensing terms.',
+                s5Title: 'Changes to These Terms',
+                s5Content: 'We reserve the right to modify these terms at any time. Your continued use of PortAI following any changes constitutes your acceptance of the revised terms.',
+                footerPrivacy: 'Privacy Policy',
+                footerTerms: 'Terms of Service',
+                footerCopyright: '© 2026 PortAI.'
+            }
+        };
+
+        let currentLang = localStorage.getItem('lang') || 'zh';
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'zh' ? 'en' : 'zh';
+            localStorage.setItem('lang', currentLang);
+            applyLanguage();
+        }
+
+        function applyLanguage() {
+            const t = translations[currentLang];
+            document.documentElement.lang = currentLang === 'zh' ? 'zh-CN' : 'en';
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key] !== undefined) {
+                    el.textContent = t[key];
+                }
+            });
+            const langSwitchText = document.getElementById('lang-switch-text');
+            if (langSwitchText) {
+                langSwitchText.textContent = currentLang === 'zh' ? 'Global' : '中国站';
+            }
+            document.title = currentLang === 'zh' ? '服务条款 - PortAI' : 'Terms of Service - PortAI';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            applyLanguage();
+        });
+    </script>
+</body>
+</html>
