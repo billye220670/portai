@@ -144,6 +144,15 @@
             border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 0.75rem;
         }
+
+        /* Modal transitions */
+        .modal-overlay {
+            transition: opacity 0.25s ease;
+        }
+        .modal-overlay.opacity-0 { pointer-events: none; }
+        .modal-panel {
+            transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
     </style>
 </head>
 <body class="bg-background text-on-background">
@@ -358,6 +367,30 @@
         </div>
     </footer>
 
+    <!-- SmartScreen Modal -->
+    <div id="smartscreen-modal" class="modal-overlay fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm opacity-0 hidden">
+        <div id="modal-panel" class="modal-panel relative w-full max-w-md mx-4 bg-[#1a1a19] border border-white/10 rounded-2xl p-6 opacity-0 scale-95">
+            <!-- Close button -->
+            <button id="modal-close-btn" class="absolute top-4 right-4 text-on-surface/50 hover:text-on-surface transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+            <!-- Title -->
+            <h3 id="modal-title" class="text-xl font-bold text-on-background mb-4">安装提示</h3>
+            <!-- Content -->
+            <p id="modal-content" class="text-on-surface/70 text-sm leading-relaxed mb-4">由于 PortAI 是新发布的应用，Windows SmartScreen 可能会弹出安全警告。这是正常现象，请放心安装。</p>
+            <!-- Instruction block -->
+            <div class="bg-white/5 rounded-lg p-4 mb-5">
+                <p id="modal-instruction" class="text-sm leading-relaxed text-on-surface/70">如果遇到 "Windows 已保护你的电脑" 提示，请点击<span class="text-primary font-medium">「更多信息」</span>→<span class="text-primary font-medium">「仍要运行」</span>即可正常安装。</p>
+            </div>
+            <!-- Countdown button -->
+            <button id="modal-download-btn" class="w-full py-3 px-6 bg-gradient-to-r from-primary to-secondary text-on-primary font-semibold rounded-xl text-base transition-all hover:shadow-lg hover:shadow-primary/20">
+                下载将在 5 秒后开始...
+            </button>
+            <!-- Footer note -->
+            <p id="modal-footer-note" class="text-sm text-on-surface/50 text-center mt-4">PortAI 完全开源，您可随时审查源代码。</p>
+        </div>
+    </div>
+
     <!-- JavaScript -->
     <script>
         // === Translations ===
@@ -560,13 +593,19 @@
             }
 
             if (currentLang === 'zh') {
-                // Chinese mode: use China OSS download link
+                // Chinese mode: use China OSS download link, but fetch version & size from GitHub API
                 downloadBtns.forEach(btn => {
                     btn.href = CN_DOWNLOAD_URL;
                     btn.setAttribute('download', '');
                 });
-                if (versionBadge) versionBadge.textContent = 'v1.0.4';
-                if (fileSize) fileSize.textContent = '-- MB';
+                const release = await getLatestRelease();
+                if (release) {
+                    if (versionBadge) versionBadge.textContent = release.version;
+                    if (fileSize) fileSize.textContent = (release.fileSize / 1024 / 1024).toFixed(1) + ' MB';
+                } else {
+                    if (versionBadge) versionBadge.textContent = 'v1.0.4';
+                    if (fileSize) fileSize.textContent = '-- MB';
+                }
             } else {
                 // English mode: use GitHub API for download link, version, and file size
                 const release = await getLatestRelease();
@@ -598,15 +637,135 @@
         }, { threshold: 0.1 });
         document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
+        // === SmartScreen Modal Logic ===
+        let modalCountdownTimer = null;
+        let modalDownloadUrl = '';
+
+        function openSmartScreenModal(downloadUrl) {
+            modalDownloadUrl = downloadUrl;
+            const modal = document.getElementById('smartscreen-modal');
+            const panel = document.getElementById('modal-panel');
+
+            // Set modal text based on current language
+            updateModalText();
+
+            // Show modal
+            modal.classList.remove('hidden');
+            // Trigger reflow then animate in
+            requestAnimationFrame(() => {
+                modal.classList.remove('opacity-0');
+                panel.classList.remove('opacity-0', 'scale-95');
+                panel.classList.add('opacity-100', 'scale-100');
+            });
+
+            // Start countdown
+            startCountdown(5);
+        }
+
+        function closeSmartScreenModal() {
+            const modal = document.getElementById('smartscreen-modal');
+            const panel = document.getElementById('modal-panel');
+
+            // Animate out
+            modal.classList.add('opacity-0');
+            panel.classList.remove('opacity-100', 'scale-100');
+            panel.classList.add('opacity-0', 'scale-95');
+
+            // Clear countdown
+            if (modalCountdownTimer) {
+                clearInterval(modalCountdownTimer);
+                modalCountdownTimer = null;
+            }
+
+            // Hide after transition
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 250);
+        }
+
+        function startCountdown(seconds) {
+            const btn = document.getElementById('modal-download-btn');
+            let remaining = seconds;
+
+            updateCountdownBtnText(btn, remaining);
+
+            modalCountdownTimer = setInterval(() => {
+                remaining--;
+                if (remaining <= 0) {
+                    clearInterval(modalCountdownTimer);
+                    modalCountdownTimer = null;
+                    btn.textContent = currentLang === 'zh' ? '下载已开始' : 'Download started';
+                    triggerDownload();
+                } else {
+                    updateCountdownBtnText(btn, remaining);
+                }
+            }, 1000);
+        }
+
+        function updateCountdownBtnText(btn, seconds) {
+            btn.textContent = currentLang === 'zh'
+                ? `下载将在 ${seconds} 秒后开始...`
+                : `Download starts in ${seconds} seconds...`;
+        }
+
+        function triggerDownload() {
+            if (modalDownloadUrl) {
+                window.location.href = modalDownloadUrl;
+            }
+        }
+
+        function updateModalText() {
+            const title = document.getElementById('modal-title');
+            const content = document.getElementById('modal-content');
+            const instruction = document.getElementById('modal-instruction');
+            const footerNote = document.getElementById('modal-footer-note');
+
+            if (currentLang === 'zh') {
+                title.textContent = '安装提示';
+                content.textContent = '由于 PortAI 是新发布的应用，Windows SmartScreen 可能会弹出安全警告。这是正常现象，请放心安装。';
+                instruction.innerHTML = '如果遇到 "Windows 已保护你的电脑" 提示，请点击<span class="text-primary font-medium">「更多信息」</span>→<span class="text-primary font-medium">「仍要运行」</span>即可正常安装。';
+                footerNote.textContent = 'PortAI 完全开源，您可随时审查源代码。';
+            } else {
+                title.textContent = 'Installation Note';
+                content.textContent = 'Since PortAI is a newly released app, Windows SmartScreen may display a security warning. This is normal and safe to proceed.';
+                instruction.innerHTML = 'If you see "Windows protected your PC", click <span class="text-primary font-medium">"More info"</span> → <span class="text-primary font-medium">"Run anyway"</span> to install normally.';
+                footerNote.textContent = 'PortAI is fully open source — you can review the code anytime.';
+            }
+        }
+
         // === Init on page load ===
         document.addEventListener('DOMContentLoaded', () => {
             applyLanguage();
 
-            // Increment download count on any download button click (fire-and-forget)
+            // Download button click: show modal + increment count
             document.querySelectorAll('.download-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const downloadUrl = btn.href;
                     incrementDownloadCount();
+                    openSmartScreenModal(downloadUrl);
                 });
+            });
+
+            // Modal close button
+            document.getElementById('modal-close-btn').addEventListener('click', closeSmartScreenModal);
+
+            // Modal overlay click to close
+            document.getElementById('smartscreen-modal').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) {
+                    closeSmartScreenModal();
+                }
+            });
+
+            // Modal "Download Now" button
+            document.getElementById('modal-download-btn').addEventListener('click', () => {
+                if (modalCountdownTimer) {
+                    clearInterval(modalCountdownTimer);
+                    modalCountdownTimer = null;
+                }
+                const btn = document.getElementById('modal-download-btn');
+                btn.textContent = currentLang === 'zh' ? '下载已开始' : 'Download started';
+                triggerDownload();
             });
         });
     </script>
